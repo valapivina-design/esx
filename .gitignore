@@ -77,3 +77,5 @@ firebase-service-account.json
 # local zip / unpack
 escrow-mvp-deploy.zip
 escrow-mvp-deploy/
+
+.github/
