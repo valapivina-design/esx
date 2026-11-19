@@ -2,7 +2,6 @@ import Link from "next/link";
 import { AuthShell } from "@/components/marketing/auth-shell";
 import { Input, Label } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { signUpAction } from "@/lib/auth/actions";
 import { safeNextPath } from "@/lib/auth/paths";
 
 export default async function RegisterPage({
@@ -17,7 +16,7 @@ export default async function RegisterPage({
       {error && (
         <div className="mb-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>
       )}
-      <form action={signUpAction} className="space-y-4">
+      <form action="/api/auth/signup" method="post" className="space-y-4">
         <input type="hidden" name="next" value={next} />
         <div>
           <Label htmlFor="full_name">Full name</Label>

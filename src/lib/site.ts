@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { safePublicUrl } from "@/lib/urls";
+
+export { safePublicUrl } from "@/lib/urls";
 
 export const siteConfig = {
   name: "101 Escrow Services",
@@ -6,9 +9,9 @@ export const siteConfig = {
   legalName: "101 Escrow Services",
   description:
     "Crypto escrow service and bitcoin escrow for P2P trades, plus real estate closings. Secure cryptocurrency escrow services with cold storage and manual officer release.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://101escrowservices.net",
+  url: safePublicUrl(process.env.NEXT_PUBLIC_SITE_URL, "https://101escrowservices.net"),
   /** Staff portal on a separate subdomain (never linked from marketing SEO). */
-  adminUrl: process.env.NEXT_PUBLIC_ADMIN_URL || "https://admin.101escrowservices.net",
+  adminUrl: safePublicUrl(process.env.NEXT_PUBLIC_ADMIN_URL, "https://admin.101escrowservices.net"),
   email: "support@101escrowservices.net",
   phone: "(626) 999-5969",
   phoneTel: "+16269995969",

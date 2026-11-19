@@ -105,6 +105,12 @@ export interface TimelineEvent {
   created_at: string;
 }
 
+export interface KycDocumentMeta {
+  name: string;
+  size: number;
+  type: string;
+}
+
 export interface KycSubmission {
   id: string;
   user_id: string;
@@ -115,6 +121,13 @@ export interface KycSubmission {
   proof_of_address_url: string | null;
   selfie_url: string | null;
   liveness_check_url: string | null;
+  /** Present when the user attached files; paths may be null if Storage was unavailable. */
+  document_meta?: Partial<
+    Record<
+      "id_document" | "passport" | "proof_of_address" | "selfie" | "liveness_check",
+      KycDocumentMeta | null
+    >
+  >;
   compliance_notes: string | null;
   reviewed_by: string | null;
   reviewed_at: string | null;

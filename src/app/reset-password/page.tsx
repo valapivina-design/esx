@@ -2,7 +2,6 @@ import Link from "next/link";
 import { AuthShell } from "@/components/marketing/auth-shell";
 import { Input, Label } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { resetPasswordAction } from "@/lib/auth/actions";
 
 export default async function ResetPasswordPage({
   searchParams,
@@ -23,7 +22,7 @@ export default async function ResetPasswordPage({
           </Link>
         </div>
       ) : (
-        <form action={resetPasswordAction} className="space-y-4">
+        <form action="/api/auth/reset-password" method="post" className="space-y-4">
           <input type="hidden" name="oobCode" value={oobCode} />
           <div>
             <Label htmlFor="password">New password</Label>

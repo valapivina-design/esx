@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { isNextRedirectError } from "@/lib/auth/redirect-error";
 import { signInWithPassword, signUpWithPassword, sendPasswordReset, resetPasswordWithOob } from "@/lib/firebase/auth-rest";
 import {
   clearAdminSessionCookie,
@@ -34,7 +34,7 @@ export async function signInAction(formData: FormData) {
     // Admins use the separate admin subdomain — never open staff UI from the public site.
     redirect(next);
   } catch (e) {
-    if (isRedirectError(e)) throw e;
+    if (isNextRedirectError(e)) throw e;
     const message = e instanceof Error ? e.message : "Sign in failed";
     redirect(`/login?error=${encodeURIComponent(message)}&next=${encodeURIComponent(next)}`);
   }
@@ -55,7 +55,7 @@ export async function adminSignInAction(formData: FormData) {
     await createAdminSessionCookie(result.idToken);
     redirect("/admin");
   } catch (e) {
-    if (isRedirectError(e)) throw e;
+    if (isNextRedirectError(e)) throw e;
     const message = e instanceof Error ? e.message : "Sign in failed";
     redirect(`/admin-login?error=${encodeURIComponent(message)}`);
   }
@@ -81,7 +81,7 @@ export async function signUpAction(formData: FormData) {
     await ensureUserProfile(result.localId, result.email, fullName);
     redirect(next);
   } catch (e) {
-    if (isRedirectError(e)) throw e;
+    if (isNextRedirectError(e)) throw e;
     const message = e instanceof Error ? e.message : "Sign up failed";
     redirect(`/register?error=${encodeURIComponent(message)}&next=${encodeURIComponent(next)}`);
   }
@@ -119,7 +119,7 @@ export async function resetPasswordAction(formData: FormData) {
   try {
     await resetPasswordWithOob(oobCode, password);
   } catch (e) {
-    if (isRedirectError(e)) throw e;
+    if (isNextRedirectError(e)) throw e;
     const message = e instanceof Error ? e.message : "Reset failed";
     redirect(
       `/reset-password?error=${encodeURIComponent(message)}&oobCode=${encodeURIComponent(oobCode)}`

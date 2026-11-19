@@ -184,10 +184,11 @@ export function KycWizard({
             type="file"
             name="id_document"
             accept="image/*,.pdf"
+            capture="environment"
             className="hidden"
             onChange={(e) => setIdDocument(e.target.files?.[0] ?? null)}
           />
-          <input ref={passportInputRef} type="file" name="passport" accept="image/*,.pdf" className="hidden" />
+          <input ref={passportInputRef} type="file" name="passport" accept="image/*,.pdf" capture="environment" className="hidden" />
           {/* Phone carrier — kept mounted so its value is included on submit. */}
           <input type="hidden" name="phone" value={phone} />
           <input
@@ -195,6 +196,7 @@ export function KycWizard({
             type="file"
             name="proof_of_address"
             accept="image/*,.pdf"
+            capture="environment"
             className="hidden"
             onChange={(e) => setProofOfAddress(e.target.files?.[0] ?? null)}
           />
@@ -203,6 +205,7 @@ export function KycWizard({
             type="file"
             name="selfie"
             accept="image/*"
+            capture="user"
             className="hidden"
             onChange={(e) => setSelfie(e.target.files?.[0] ?? null)}
           />
@@ -211,6 +214,7 @@ export function KycWizard({
             type="file"
             name="liveness_check"
             accept="image/*,video/*"
+            capture="user"
             className="hidden"
             onChange={(e) => setLivenessCheck(e.target.files?.[0] ?? null)}
           />
@@ -271,6 +275,7 @@ export function KycWizard({
                   id="proof_of_address_visible"
                   type="file"
                   accept="image/*,.pdf"
+                  capture="environment"
                   onChange={(e) => {
                     const f = e.target.files?.[0] ?? null;
                     setProofOfAddress(f);
@@ -316,6 +321,7 @@ export function KycWizard({
                   id="liveness_visible"
                   type="file"
                   accept="image/*,video/*"
+                  capture="user"
                   onChange={(e) => {
                     const f = e.target.files?.[0] ?? null;
                     setLivenessCheck(f);
@@ -428,7 +434,9 @@ function UploadDropzone({
         {icon ?? <Upload className="h-5 w-5" />}
       </span>
       <span className="text-sm font-medium text-gray-900">{file ? file.name : `Upload ${label.toLowerCase()}`}</span>
-      <span className="text-xs text-gray-400">{file ? "Tap to replace" : "Click to choose a file"}</span>
+      <span className="text-xs text-gray-400">
+        {file ? "Tap to replace" : "Take a photo or choose a file"}
+      </span>
     </button>
   );
 }

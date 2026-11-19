@@ -24,28 +24,30 @@ function parseServiceAccountJson(): ServiceAccount | null {
   const raw = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
   if (!raw) return null;
   try {
-    const parsed = JSON.parse(raw) as ServiceAccount & { private_key?: string };
+    // Vercel sometimes stores JSON with surrounding quotes or escaped newlines as the whole value.
+    const cleaned = raw.trim().replace(/^['"]|['"]$/g, "");
+    const parsed = JSON.parse(cleaned) as ServiceAccount & { private_key?: string };
     if (parsed.private_key) {
       parsed.private_key = String(parsed.private_key).replace(/\\n/g, "\n");
     }
     return parsed;
-  } catch {
-    throw new Error("FIREBASE_SERVICE_ACCOUNT_JSON is not valid JSON");
+  } catch (err) {
+    console.error(
+      "[firebase-admin] FIREBASE_SERVICE_ACCOUNT_JSON is not valid JSON:",
+      err instanceof Error ? err.message : err
+    );
+    return null;
   }
 }
 
 export function isFirebaseConfigured(): boolean {
-  if (useFirebaseEmulator() && process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
-    return true;
-  }
-  if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON && process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
-    return true;
-  }
+  if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) return false;
+  if (useFirebaseEmulator()) return true;
+  if (parseServiceAccountJson()) return true;
   return Boolean(
     process.env.FIREBASE_ADMIN_PROJECT_ID &&
       process.env.FIREBASE_ADMIN_CLIENT_EMAIL &&
-      process.env.FIREBASE_ADMIN_PRIVATE_KEY &&
-      process.env.NEXT_PUBLIC_FIREBASE_API_KEY
+      process.env.FIREBASE_ADMIN_PRIVATE_KEY
   );
 }
 

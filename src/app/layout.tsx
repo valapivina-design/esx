@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
-import { baseOpenGraph, organizationJsonLd, siteConfig } from "@/lib/site";
+import { baseOpenGraph, organizationJsonLd, safePublicUrl, siteConfig } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -22,7 +22,7 @@ const playfair = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
+  metadataBase: new URL(safePublicUrl(siteConfig.url, "https://101escrowservices.net")),
   title: {
     default: `${siteConfig.name} | Real Estate & Crypto Escrow`,
     template: `%s | ${siteConfig.name}`,

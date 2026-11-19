@@ -2,7 +2,6 @@ import Link from "next/link";
 import { AuthShell } from "@/components/marketing/auth-shell";
 import { Input, Label } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { signInAction } from "@/lib/auth/actions";
 import { safeNextPath } from "@/lib/auth/paths";
 
 export default async function LoginPage({
@@ -27,7 +26,7 @@ export default async function LoginPage({
       {error && (
         <div className="mb-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>
       )}
-      <form action={signInAction} className="space-y-4">
+      <form action="/api/auth/signin" method="post" className="space-y-4">
         <input type="hidden" name="next" value={next} />
         <div>
           <Label htmlFor="email">Email</Label>

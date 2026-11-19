@@ -1,7 +1,6 @@
 import { AuthShell } from "@/components/marketing/auth-shell";
 import { Input, Label } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { adminSignInAction } from "@/lib/auth/actions";
 import { publicAbsoluteUrl } from "@/lib/hosts";
 import { ShieldCheck } from "lucide-react";
 
@@ -20,7 +19,7 @@ export default async function AdminLoginPage({
       {error && (
         <div className="mb-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>
       )}
-      <form action={adminSignInAction} className="space-y-4">
+      <form action="/api/auth/admin-signin" method="post" className="space-y-4">
         <div>
           <Label htmlFor="email">Email</Label>
           <Input id="email" name="email" type="email" required placeholder="admin@101escrowservices.net" />

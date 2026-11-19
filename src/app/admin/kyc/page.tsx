@@ -31,12 +31,13 @@ export default async function AdminKycQueuePage() {
       <div className="grid gap-4 p-6 pt-0">
         {all.map((s) => {
           const user = userOf(s.user_id);
+          const meta = s.document_meta ?? {};
           const docs = [
-            { label: "Government ID", path: s.id_document_url },
-            { label: "Passport / National ID", path: s.passport_url },
-            { label: "Proof of Address", path: s.proof_of_address_url },
-            { label: "Selfie", path: s.selfie_url },
-            { label: "Liveness Check", path: s.liveness_check_url },
+            { label: "Government ID", path: s.id_document_url, meta: meta.id_document },
+            { label: "Passport / National ID", path: s.passport_url, meta: meta.passport },
+            { label: "Proof of Address", path: s.proof_of_address_url, meta: meta.proof_of_address },
+            { label: "Selfie", path: s.selfie_url, meta: meta.selfie },
+            { label: "Liveness Check", path: s.liveness_check_url, meta: meta.liveness_check },
           ];
           return (
             <Card key={s.id}>
@@ -47,21 +48,34 @@ export default async function AdminKycQueuePage() {
               <CardContent className="grid gap-4 lg:grid-cols-3">
                 <div className="space-y-3 lg:col-span-2">
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                    {docs.map((d) => (
-                      <div key={d.label} className={`flex flex-col gap-2 rounded-lg border p-2 text-center ${d.path ? "border-border-soft" : "border-dashed opacity-60"}`}>
-                        <div className="flex h-24 items-center justify-center rounded-md bg-gray-50">
-                          <FileImage className={`h-6 w-6 ${d.path ? "text-gold" : "text-gray-300"}`} />
+                    {docs.map((d) => {
+                      const received = !!(d.path || d.meta);
+                      const statusLabel = d.path
+                        ? "Uploaded"
+                        : d.meta
+                          ? `Received · ${d.meta.name}`
+                          : "Not submitted";
+                      return (
+                        <div key={d.label} className={`flex flex-col gap-2 rounded-lg border p-2 text-center ${received ? "border-border-soft" : "border-dashed opacity-60"}`}>
+                          <div className="flex h-24 items-center justify-center rounded-md bg-gray-50">
+                            <FileImage className={`h-6 w-6 ${received ? "text-gold" : "text-gray-300"}`} />
+                          </div>
+                          <span className="text-xs font-medium text-gray-700">{d.label}</span>
+                          <span className="truncate px-1 text-[10px] text-gray-400">{statusLabel}</span>
                         </div>
-                        <span className="text-xs font-medium text-gray-700">{d.label}</span>
-                        <span className="truncate px-1 text-[10px] text-gray-400">{d.path ? "Uploaded" : "Not submitted"}</span>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                   <div className="rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600">
                     <span className="font-medium text-gray-800">Phone:</span> {user?.phone || "—"}
                     <span className="mx-2 text-gray-300">·</span>
                     <span className="font-medium text-gray-800">Email:</span> {user?.email || "—"}
                   </div>
+                  {s.compliance_notes && (
+                    <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+                      {s.compliance_notes}
+                    </p>
+                  )}
                   <p className="text-xs text-gray-400">Submitted {formatDate(s.submitted_at)}</p>
                 </div>
                 <div className="flex flex-col gap-2">

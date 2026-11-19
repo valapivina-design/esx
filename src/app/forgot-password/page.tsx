@@ -1,7 +1,6 @@
 import { AuthShell } from "@/components/marketing/auth-shell";
 import { Input, Label } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { forgotPasswordAction } from "@/lib/auth/actions";
 
 export default async function ForgotPasswordPage({
   searchParams,
@@ -16,7 +15,7 @@ export default async function ForgotPasswordPage({
           If an account exists for that email, a reset link has been sent.
         </div>
       )}
-      <form action={forgotPasswordAction} className="space-y-4">
+      <form action="/api/auth/forgot-password" method="post" className="space-y-4">
         <div>
           <Label htmlFor="email">Email</Label>
           <Input id="email" name="email" type="email" required placeholder="you@example.com" />

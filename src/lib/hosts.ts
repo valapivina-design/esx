@@ -5,17 +5,19 @@
  * Local:       http://localhost:3100          +  http://admin.localhost:3100
  */
 
+import { safePublicUrl } from "@/lib/urls";
+
 function stripTrailingSlash(url: string) {
   return url.replace(/\/$/, "");
 }
 
 export function publicSiteUrl() {
-  return stripTrailingSlash(process.env.NEXT_PUBLIC_SITE_URL || "https://101escrowservices.net");
+  return stripTrailingSlash(safePublicUrl(process.env.NEXT_PUBLIC_SITE_URL, "https://101escrowservices.net"));
 }
 
 export function adminSiteUrl() {
   return stripTrailingSlash(
-    process.env.NEXT_PUBLIC_ADMIN_URL || "https://admin.101escrowservices.net"
+    safePublicUrl(process.env.NEXT_PUBLIC_ADMIN_URL, "https://admin.101escrowservices.net")
   );
 }
 
